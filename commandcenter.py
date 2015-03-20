@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.2
 import logging
+import os
 
 from tornado.escape import json_decode, json_encode
 from tornado.ioloop import IOLoop
@@ -18,6 +19,7 @@ define('debug', default=False, group='application',
 def main():
     parse_command_line(final=False)
     parse_config_file(options.config_file)
+
     app = Application(
             [
                 ('/', AppHandler),
@@ -28,8 +30,8 @@ def main():
                 ('/api/status', ApiStatusHandler),
                 ],
             #login_url='/login',
-            'static_path': os.path.join(os.path.dirname(__file__), 'static'),
-            'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
+            static_path=os.path.join(os.path.dirname(__file__), 'static'),
+            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
             **options.group_dict('application'))
     app.listen(options.port)
     logging.info('Listening on http://localhost:%d' % options.port)

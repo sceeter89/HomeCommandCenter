@@ -4,4 +4,5 @@ class BaseHandler(RequestHandler):
     pass
 
 class AppHandler(BaseHandler):
-    pass
+    def get(self):
+        self.render('index.html')
