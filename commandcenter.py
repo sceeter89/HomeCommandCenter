@@ -28,6 +28,8 @@ def main():
                 ('/api/status', ApiStatusHandler),
                 ],
             #login_url='/login',
+            'static_path': os.path.join(os.path.dirname(__file__), 'static'),
+            'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
             **options.group_dict('application'))
     app.listen(options.port)
     logging.info('Listening on http://localhost:%d' % options.port)
