@@ -1,0 +1,9 @@
+[Core]
+Name = Every frame display state on STDOUT and sleep for 1 second
+Module = ./console_debug
+
+[Documentation]
+Description = What my plugin broadly does
+Author = My very own name
+Version = the_version_number_of_the_plugin
+Website = My very own website
