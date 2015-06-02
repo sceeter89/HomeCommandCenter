@@ -1,12 +1,15 @@
+__author__ = 'yakuza'
+
 import time
+import logging
+from yapsy.PluginManager import PluginManager
+
 from api.sensor import Sensor
 from api.motor import Motor
 
-__author__ = 'yakuza'
-
-from yapsy.PluginManager import PluginManager
-import logging
 logging.basicConfig(level=logging.DEBUG)
+
+
 def main():
     # Load the plugins from the plugin directory.
     plugin_manager = PluginManager()
@@ -27,14 +30,20 @@ def main():
             sensor_plugins.append(plugin)
 
     while True:
-        state = {}
+        state = {
+            'errors': []
+        }
         for sensor_plugin in sensor_plugins:
-            state[sensor_plugin.name] = sensor_plugin.plugin_object.get_state()
+            try:
+                state[sensor_plugin.name] = sensor_plugin.plugin_object.get_state()
+            except Exception as e:
+                state['errors'].append(e)
 
         for motor_plugin in motor_plugins:
             motor_plugin.plugin_object.on_trigger(state)
 
         time.sleep(0.2)
+
 
 if __name__ == "__main__":
     main()
