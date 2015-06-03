@@ -1,0 +1,2 @@
+class TerminateApplication(Exception):
+    pass

@@ -1,13 +1,8 @@
-__author__ = 'yakuza'
-
 import abc
 from yapsy.IPlugin import IPlugin
 
 
 class Motor(IPlugin):
-    def __init__(self):
-        pass
-
     @abc.abstractmethod
     def on_trigger(self, current_state):
         """ This method will be called repeatedly, so corresponding motor's state can be updated properly.

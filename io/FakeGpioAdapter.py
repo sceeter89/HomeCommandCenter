@@ -1,6 +1,7 @@
 from IGpioAdapter import IGpioAdapter
 from ConfigParser import SafeConfigParser
 
+
 class FakeGpioAdapter(IGpioAdapter):
     def _getCurrentConfig(self):
         config = SafeConfigParser()
@@ -49,4 +50,3 @@ class FakeGpioAdapter(IGpioAdapter):
 
     def get_alarm_alert(self):
         return self._getBoolConfigValue('alarm', 'alert')
-

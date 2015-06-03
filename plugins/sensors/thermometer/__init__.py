@@ -1,6 +1,5 @@
-__author__ = 'yakuza'
-
 from api.sensor import Sensor
+
 
 class Thermometer(Sensor):
     def get_state(self):

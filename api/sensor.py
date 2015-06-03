@@ -1,11 +1,8 @@
-__author__ = 'yakuza'
 import abc
 from yapsy.IPlugin import IPlugin
 
-class Sensor(IPlugin):
-    def __init__(self):
-        pass
 
+class Sensor(IPlugin):
     @abc.abstractmethod
     def get_state(self):
         """
