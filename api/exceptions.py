@@ -1,2 +1,2 @@
 class TerminateApplication(Exception):
-    pass
+    reason = ""
