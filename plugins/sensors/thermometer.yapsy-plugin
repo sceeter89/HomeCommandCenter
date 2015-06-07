@@ -1,6 +1,6 @@
 [Core]
-Name = My plugin Name
-Module = thermometer
+Name = 1-wire thermometer
+Module = thermometer/thermometer
 Key = thermometer
 
 [Documentation]

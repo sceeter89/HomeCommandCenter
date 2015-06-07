@@ -1,7 +1,7 @@
 [Core]
-Name = Every frame display state on STDOUT and sleep for 1 second
-Module = console_debug/console_debug
-Key = console-debug
+Name = Alarm sensor
+Module = alarm/alarm
+Key = alarm
 
 [Documentation]
 Description = What my plugin broadly does

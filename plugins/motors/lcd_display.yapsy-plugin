@@ -1,6 +1,6 @@
 [Core]
 Name = LCD Display Plugin
-Module = lcd_display
+Module = lcd_display/lcd_display
 Key = lcd-display
 
 [Documentation]

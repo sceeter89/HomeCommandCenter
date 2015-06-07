@@ -5,8 +5,22 @@ such as:
 * Alarm stand-by and alert mode
 
 After states of all sensors are retrieved then all motors are triggered.
- 
-## Architecture
+
+## Running Command Center
+There are few requirements that must be fulfilled for core application to run. Every motor and sensor may introduce
+plugin specific dependencies. Application is know to run on:
+* Python 3.4+
+* Kubuntu 14.10
+* Python packages:
+  * _yapsy_
+
+To run tests you will additionally need `pyhamcrest` package. Navigate in command line to `command_center` directory 
+and type following command to run all tests:
+```bash
+python -m unittest discover tests/
+```
+
+# Architecture
 Service consists of:
 * Core application
 * Sensors
@@ -18,7 +32,8 @@ _built-in_. Custom sensors are pluggable via [Yapsy](http://yapsy.sourceforge.ne
 `plugins/sensors` directory. For details on developing your own sensor take a look at _Development_ section.
 
 Below you will find list of all _built-in_ sensors:
-* `errors` - value is list of all exceptions that occured during current run. It's cleared every iteration.
+* `errors` - value is list of all exceptions that occured during current run. It's cleared every iteration. It contains
+  tuples (plugin key, exception object) for every exception thrown.
 * `now` - contains datetime of current loop start. It's identical for every motor.
 * `disabled_plugins` - list containing keys of all plugins that were disabled because of exceeded number of failures.
 * `termination` - if value is not `None`, means that system is about to shut down, and contains tuple in following format: ```python
@@ -36,11 +51,11 @@ For example when temperature remains too high, air conditioner might be turned o
 similarly to sensors - using [Yapsy](http://yapsy.sourceforge.net), and reside in `plugins/motors` directory. There are
 no built-in motors.
 
-### Application flow
+## Application flow
 Sensors, then motors, if too much fails then disabled and logged information about all exceptions. Conditions when
 disabled.
 
-## Development
+# Development
 To develop custom sensor or motor you need to create a yapsy-plugin, which basically means:
 1. Copy template from `plugin/templates` directory, and give it appropriate name, .yapsy-plugin file must have name
  matching directory name.
@@ -68,9 +83,9 @@ Shutdown procedure is as follows:
    last loop state will only contain _built-in_ sensors, so be prepared for missing custom sensors state. 
 1. Terminate application
 
-### Sensors
+## Sensors
 Available sensors out of the box.
-#### Writing custom sensor
-### Motors
+### Writing custom sensor
+## Motors
 Available motors out of the box.
-#### Writing custom motor
+### Writing custom motor

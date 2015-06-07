@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from api.exceptions import TerminateApplication
 from api.sensor import Sensor
 from api.motor import Motor
@@ -12,92 +12,117 @@ PluginDetails = namedtuple('PluginInfo', ['name', 'key', 'instance', 'wants_last
 ALLOWED_UNHANDLED_EXCEPTIONS_PER_PLUGIN = 10
 
 
-def start_main_loop(sensors, motors):
-    disabled_plugins = set()
-    total_loops_duration = timedelta()
-    runtime_stats = {
-        'start_time': datetime.now(),
-        'loop_counter': 0,
-        'errors': {},
-        'average_loop_duration': timedelta(seconds=0),
-        'last_loop_duration': timedelta(seconds=0)
-    }
-    termination = None
-    while termination is None:
-        loop_start = datetime.now()
-        state = {
-            'errors': [],
-            'now': datetime.now(),
-            'runtime': runtime_stats,
-            'disabled_plugins': disabled_plugins,
-            'termination': termination
+class CoreApplication:
+    def __init__(self, sensors, motors):
+        self._motors = motors
+        self._sensors = sensors
+        self._disabled_plugins = set()
+        self._runtime_stats = {
+            'start_time': datetime.now(),
+            'loop_counter': 0,
+            'errors': defaultdict(list),
+            'average_loop_duration': timedelta(seconds=0),
+            'last_loop_duration': timedelta(seconds=0)
         }
-        for plugin in sensors:
-            if plugin.key in disabled_plugins:
+        self._termination = None
+        self._total_loops_duration = timedelta()
+
+    def _process_sensors(self, state):
+        for plugin in self._sensors:
+            if plugin.key in self._disabled_plugins:
                 continue
 
             try:
-                state[plugin.name] = plugin.instance.get_state()
+                state[plugin.key] = plugin.instance.get_state()
             except TerminateApplication as exception:
-                termination = (plugin.key, type(plugin.instance), exception.reason)
+                self._termination = (plugin.key, type(plugin.instance), exception.reason)
             except KeyboardInterrupt:
-                termination = (plugin.key, type(plugin.instance), "User interruption")
+                self._termination = (plugin.key, type(plugin.instance), "User interruption")
             except Exception as exception:
-                runtime_stats['errors'].get(plugin.key, []).append(exception)
-                state['errors'].append(exception)
+                logging.debug('"%s" threw exception.', exc_info=exception)
+                self._runtime_stats['errors'][plugin.key].append(exception)
+                state['errors'].append((plugin.key, exception))
 
-        for plugin in motors:
-            if plugin.key in disabled_plugins:
+    def _process_motors(self, state):
+        for plugin in self._motors:
+            if plugin.key in self._disabled_plugins:
                 continue
+
             try:
                 plugin.instance.on_trigger(state)
             except TerminateApplication as exception:
-                termination = (plugin.key, type(plugin.instance), exception.reason)
+                self._termination = (plugin.key, type(plugin.instance), exception.reason)
             except KeyboardInterrupt:
-                termination = (plugin.key, type(plugin.instance), "User interruption")
+                self._termination = (plugin.key, type(plugin.instance), "User interruption")
             except Exception as exception:
-                runtime_stats['errors'].get(plugin.key, []).append(exception)
-                state['errors'].append(exception)
+                logging.debug('"%s" threw exception.', exc_info=exception)
+                self._runtime_stats['errors'][plugin.key].append(exception)
+                state['errors'].append((plugin.key, exception))
 
-        loop_stop = datetime.now()
-        loop_duration = loop_stop - loop_start
-        total_loops_duration += loop_duration
-        runtime_stats['loop_counter'] += 1
-        runtime_stats['average_loop_duration'] = total_loops_duration.total_seconds() / runtime_stats[
-            'loop_counter']
-        runtime_stats['last_loop_duration'] = loop_duration
-
-        for failing_plugin in runtime_stats['errors']:
-            if failing_plugin in disabled_plugins:
+    def _disable_failing_plugins(self):
+        for key in self._runtime_stats['errors']:
+            if key in self._disabled_plugins:
                 continue
 
-            if len(runtime_stats['errors'][failing_plugin]) > ALLOWED_UNHANDLED_EXCEPTIONS_PER_PLUGIN:
-                disabled_plugins.add(failing_plugin)
+            if len(self._runtime_stats['errors'][key]) > ALLOWED_UNHANDLED_EXCEPTIONS_PER_PLUGIN:
+                logging.warning('Disabling plugin due to repeating failures: %s', key)
+                self._disabled_plugins.add(key)
 
-        if len(disabled_plugins) == len(sensors) + len(motors):
-            logging.warning('All plugins have been disabled. Terminating application..')
-            break
+    def _update_runtime_statistics(self, loop_duration):
+        self._total_loops_duration += loop_duration
+        self._runtime_stats['loop_counter'] += 1
+        self._runtime_stats['average_loop_duration'] = self._total_loops_duration / self._runtime_stats['loop_counter']
+        self._runtime_stats['last_loop_duration'] = loop_duration
 
-        time.sleep(0.2)
+    def _build_loop_state(self):
+        return {
+            'errors': [],
+            'now': datetime.now(),
+            'runtime': self._runtime_stats,
+            'disabled_plugins': self._disabled_plugins,
+            'termination': self._termination
+        }
 
-    logging.info("Initiating shutdown procedure...")
-    terminal_state = {
-        'now': datetime.now(),
-        'runtime': runtime_stats,
-        'disabled_plugins': disabled_plugins,
-        'termination': termination
-    }
-    for plugin in motors:
-        if plugin.key in disabled_plugins or not plugin.wants_last_chance:
-            continue
+    def start_main_loop(self):
+        while self._termination is None:
+            try:
+                loop_start = datetime.now()
+                state = self._build_loop_state()
+                self._process_sensors(state)
+                self._process_motors(state)
 
-        try:
-            plugin.instance.on_trigger(terminal_state)
-        except Exception as exception:
-            runtime_stats['errors'].get(plugin.key, []).append(exception)
+                self._disable_failing_plugins()
 
-    logging.info("Shutdown complete.")
-    logging.info(repr(runtime_stats))
+                loop_stop = datetime.now()
+
+                loop_duration = loop_stop - loop_start
+                self._update_runtime_statistics(loop_duration)
+
+                if len(self._disabled_plugins) == len(self._sensors) + len(self._motors):
+                    logging.warning('All plugins have been disabled. Terminating application..')
+                    break
+
+                if state['errors']:
+                    logging.warning('Current loop was interrupted by following exceptions: %s', repr(state['errors']))
+
+                time.sleep(0.2)
+
+            except KeyboardInterrupt:
+                termination = (None, None, "User interruption")
+
+        logging.info("Initiating shutdown procedure...")
+        terminal_state = self._build_loop_state()
+        for plugin in self._motors:
+            if plugin.key in self._disabled_plugins or not plugin.wants_last_chance:
+                continue
+
+            try:
+                plugin.instance.on_trigger(terminal_state)
+            except Exception as exception:
+                self._runtime_stats['errors'][plugin.key].append(exception)
+
+        logging.info("Shutdown complete.")
+        logging.info(repr(self._runtime_stats))
 
 
 def collect_all_plugins():
@@ -108,8 +133,8 @@ def collect_all_plugins():
 
     for plugin in plugin_manager.getAllPlugins():
         name = plugin.name
-        key = plugin.details.get('core', {}).get('key', None)
-        wants_last_chance = plugin.details.get('core', {}).get('last-chance', False).lower() == "true"
+        key = plugin.details.get('Core', 'key')
+        wants_last_chance = plugin.details.get('Core', 'last-chance', fallback='').lower() == "true"
         instance = plugin.plugin_object
         path = plugin.path
         yield PluginDetails(name, key, instance, wants_last_chance, path)
@@ -121,10 +146,10 @@ def load_plugins(all_plugins):
     motor_plugins = []
     sensor_plugins = []
     for plugin in all_plugins:
-        logging.debug('Processing plugin {} <{}>...', plugin.name, type(plugin.instance))
+        logging.debug('Processing plugin %s (%s) <%s>...', plugin.key, plugin.name, type(plugin.instance))
 
         if plugin.key in used_plugin_keys:
-            logging.warning('Attempt to load already loaded plugin. Duplicate: name="{}", key="{}", path "{}"',
+            logging.warning('Attempt to load already loaded plugin. Duplicate: name="%s", key="%s", path "%s"',
                             plugin.name, plugin.key, plugin.path)
             continue
 
@@ -132,7 +157,7 @@ def load_plugins(all_plugins):
             logging.debug("\tFound motor plugin.")
             motor_plugins.append(plugin)
         if isinstance(plugin.instance, Sensor):
-            logging.debug("\tFound sensor plugin with key: {}", plugin.key)
+            logging.debug("\tFound sensor plugin with key: %s", plugin.key)
             sensor_plugins.append(plugin)
 
         used_plugin_keys.add(plugin.key)
@@ -142,8 +167,9 @@ def load_plugins(all_plugins):
 
 def main():
     all_plugins = collect_all_plugins()
-    motors, sensors = load_plugins(all_plugins)
-    start_main_loop(sensors, motors)
+    sensors, motors = load_plugins(all_plugins)
+    app = CoreApplication(sensors=sensors, motors=motors)
+    app.start_main_loop()
 
 
 if __name__ == "__main__":
