@@ -36,7 +36,8 @@ Below you will find list of all _built-in_ sensors:
   tuples (plugin key, exception object) for every exception thrown.
 * `now` - contains datetime of current loop start. It's identical for every motor.
 * `disabled_plugins` - list containing keys of all plugins that were disabled because of exceeded number of failures.
-* `termination` - if value is not `None`, means that system is about to shut down, and contains tuple in following format: ```python
+* `termination` - if value is not `None`, means that system is about to shut down, and contains tuple in following format:
+  ```python
   (terminator's key, terminator's type name, reason string)
   ```
 * `runtime` - is a dictionary containing technical information about application. Following keys are available:
