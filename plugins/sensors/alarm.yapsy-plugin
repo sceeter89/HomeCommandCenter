@@ -4,7 +4,7 @@ Module = alarm/alarm
 Key = alarm
 
 [Documentation]
-Description = What my plugin broadly does
-Author = My very own name
-Version = the_version_number_of_the_plugin
-Website = My very own website
+Description = Monitors alarm inputs and reports whether it's armed or on alert
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-sensors

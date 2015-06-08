@@ -5,6 +5,7 @@
 # LiquidCrystal - https://github.com/arduino/Arduino/blob/master/libraries/LiquidCrystal/LiquidCrystal.cpp
 #
 # Adapted and refactored code from:
+#  https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py
 #
 from time import sleep
 
@@ -31,9 +32,6 @@ class LcdDisplay(object):
     LCD_CURSOROFF = 0x00
     LCD_BLINKON = 0x01
     LCD_BLINKOFF = 0x00
-    # flags for display/cursor shift
-    LCD_DISPLAYMOVE = 0x08
-    LCD_CURSORMOVE = 0x00
     # flags for display/cursor shift
     LCD_DISPLAYMOVE = 0x08
     LCD_CURSORMOVE = 0x00

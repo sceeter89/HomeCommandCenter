@@ -1,0 +1,11 @@
+[Core]
+Name = E-Mail notifier
+Module = email/email
+Key = email
+Last chance = True
+
+[Documentation]
+Description = Sends e-mail notification every time something noteworthy occurs. Email is sent every time alarm goes on alert, or is disarmed and there is user-settings service running, indicating that system is in holiday-mode
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors

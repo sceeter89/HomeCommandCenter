@@ -1,10 +1,10 @@
 [Core]
-Name = Every frame display state on STDOUT and sleep for 1 second
+Name = Console Debug
 Module = console_debug/console_debug
 Key = console-debug
 
 [Documentation]
-Description = What my plugin broadly does
-Author = My very own name
-Version = the_version_number_of_the_plugin
-Website = My very own website
+Description = Displays every 20 ticks dump of system state to console. Useful for debugging interactions inside system.
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors
