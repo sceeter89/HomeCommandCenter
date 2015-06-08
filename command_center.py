@@ -37,7 +37,7 @@ class CoreApplication:
             except TerminateApplication as exception:
                 self._termination = (plugin.key, type(plugin.instance), exception.reason)
             except KeyboardInterrupt:
-                self._termination = (plugin.key, type(plugin.instance), "User interruption")
+                self._termination = (None, None, "User interruption")
             except Exception as exception:
                 logging.debug('"%s" threw exception.', exc_info=exception)
                 self._runtime_stats['errors'][plugin.key].append(exception)
@@ -53,7 +53,7 @@ class CoreApplication:
             except TerminateApplication as exception:
                 self._termination = (plugin.key, type(plugin.instance), exception.reason)
             except KeyboardInterrupt:
-                self._termination = (plugin.key, type(plugin.instance), "User interruption")
+                self._termination = (None, None, "User interruption")
             except Exception as exception:
                 logging.debug('"%s" threw exception.', exc_info=exception)
                 self._runtime_stats['errors'][plugin.key].append(exception)
@@ -126,7 +126,6 @@ class CoreApplication:
 
 
 def collect_all_plugins():
-    # Load the plugins from the plugin directory.
     plugin_manager = PluginManager()
     plugin_manager.setPluginPlaces(['plugins/motors', 'plugins/sensors'])
     plugin_manager.collectPlugins()

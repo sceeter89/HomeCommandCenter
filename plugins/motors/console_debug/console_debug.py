@@ -1,5 +1,3 @@
-from datetime import datetime
-import time
 import logging
 
 from api.motor import Motor
