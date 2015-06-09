@@ -44,7 +44,8 @@ Your Home
 
 ALARM_ON_HOLIDAY_DISARMED_SUBJECT = "Command Center - Alarm disarmed"
 ALARM_ON_HOLIDAY_DISARMED_BODY = """Someone just disarmed alarm. It may not be anything alarming, but just in case you are
-not aware of that fact consider contact with people that have keys to apartment. Please find photos attached.
+not aware of that fact consider contact with people that have keys to apartment. If you attached any webcam,
+find photos attached.
 
 Regards,
 Your Home

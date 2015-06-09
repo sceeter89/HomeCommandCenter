@@ -22,7 +22,8 @@ plugin specific dependencies. Application is know to run on:
 * Kubuntu 14.10 and Python 3.4.2
 * Python packages:
   * _yapsy_
-  * _RPi.GPIO_ - for plugins accessing Raspberry Pi GPIO pins 
+  * _RPi.GPIO_ - for plugins accessing Raspberry Pi GPIO pins
+  * _requests_ - for plugins consuming REST API
 
 To run tests you will additionally need `pyhamcrest` package. Navigate in command line to `command_center` directory 
 and type following command to run all tests:
