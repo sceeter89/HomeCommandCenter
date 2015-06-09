@@ -1,0 +1,10 @@
+[Core]
+Name = SMS notifier
+Module = sms_notifications/sms
+Key = sms
+
+[Documentation]
+Description = Sends SMS notification when alarm enters or exit alert state.
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors

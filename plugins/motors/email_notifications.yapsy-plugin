@@ -1,6 +1,6 @@
 [Core]
 Name = E-Mail notifier
-Module = email/email
+Module = email_notifications/email_sender
 Key = email
 Last chance = True
 
