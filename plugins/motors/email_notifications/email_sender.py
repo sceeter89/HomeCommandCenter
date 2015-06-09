@@ -140,7 +140,7 @@ class EmailSender(Motor):
         alarm_alert = "alarm" in current_state and current_state["alarm"]["alert"]
         alarm_armed = "alarm" in current_state and current_state["alarm"]["armed"]
 
-        if "termination" in current_state:
+        if "termination" in current_state and current_state["termination"]:
             term_info = current_state["termination"]
             if term_info[0]:
                 body = UNEXPECTED_TERMINATION_BODY.format(key=term_info[0], type=repr(term_info[1]),

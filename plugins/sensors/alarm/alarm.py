@@ -17,6 +17,8 @@ class Alarm(Sensor):
         GPIO.setup(ALARM_ALERT_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         self._armed_readings = []
         self._alert_readings = []
+        self._last_armed_result = False
+        self._last_alert_result = False
 
     def _get_readings_state(self, readings, last_result):
         if len(readings) > self.ITEMS_LIMIT:

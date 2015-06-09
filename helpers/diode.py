@@ -4,11 +4,10 @@ from api.motor import Motor
 
 
 class Diode(Motor):
-    led_pin = -1
-
-    def __init__(self):
+    def __init__(self, led_pin):
         super().__init__()
         GPIO.setmode(GPIO.BCM)
+        self.led_pin = led_pin
         GPIO.setup(self.led_pin, GPIO.OUT)
 
     def _on(self):

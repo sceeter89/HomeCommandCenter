@@ -39,7 +39,7 @@ class CoreApplication:
             except KeyboardInterrupt:
                 self._termination = (None, None, "User interruption")
             except Exception as exception:
-                logging.debug('"%s" threw exception.', exc_info=exception)
+                logging.debug('"%s" threw exception.', plugin.key, exc_info=exception)
                 self._runtime_stats['errors'][plugin.key].append(exception)
                 state['errors'].append((plugin.key, exception))
 
@@ -55,7 +55,7 @@ class CoreApplication:
             except KeyboardInterrupt:
                 self._termination = (None, None, "User interruption")
             except Exception as exception:
-                logging.debug('"%s" threw exception.', exc_info=exception)
+                logging.debug('"%s" threw exception.', plugin.key, exc_info=exception)
                 self._runtime_stats['errors'][plugin.key].append(exception)
                 state['errors'].append((plugin.key, exception))
 
@@ -108,7 +108,7 @@ class CoreApplication:
                 time.sleep(0.2)
 
             except KeyboardInterrupt:
-                termination = (None, None, "User interruption")
+                self._termination = (None, None, "User interruption")
 
         logging.info("Initiating shutdown procedure...")
         terminal_state = self._build_loop_state()

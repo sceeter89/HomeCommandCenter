@@ -4,8 +4,10 @@ LED_PIN = 15
 
 
 class RedLed(Diode):
-    led_pin = LED_PIN
     counter = 0
+
+    def __init__(self):
+        super().__init__(LED_PIN)
 
     def on_trigger(self, current_state):
         if self.counter % 2 != 0:
