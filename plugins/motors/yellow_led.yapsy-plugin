@@ -1,0 +1,10 @@
+[Core]
+Name = Yellow LED
+Module = yellow_led/yellow_led
+Key = yellow-led
+
+[Documentation]
+Description = If light is still it means that there are disabled plugins, if it blinks - temperature is abnormal
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors

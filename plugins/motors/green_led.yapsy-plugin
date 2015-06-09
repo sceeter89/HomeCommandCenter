@@ -1,0 +1,10 @@
+[Core]
+Name = Green LED
+Module = green_led/green_led
+Key = green-led
+
+[Documentation]
+Description = Indicates that system is running properly and blinks if weather forecast warns that it might rain
+Author = Yakuza
+Version = 1.0
+Website = My very own website

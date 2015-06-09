@@ -1,0 +1,10 @@
+[Core]
+Name = Weather Forecast
+Module = weather_forecast/forecast
+Key = weather
+
+[Documentation]
+Description = Every 30 minutes updates weather forecast from worldweatheronline.com API and exposes for motors
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-sensors

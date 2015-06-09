@@ -1,0 +1,11 @@
+[Core]
+Name = Red LED
+Module = red_led/red_led
+Key = red-led
+Last chance = True
+
+[Documentation]
+Description = If light is still it means that there are disabled plugins, if it blinks - temperature is abnormal
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors

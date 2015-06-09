@@ -4,7 +4,7 @@ Module = lcd_display/lcd_display
 Key = lcd-display
 
 [Documentation]
-Description = What my plugin broadly does
-Author = My very own name
-Version = the_version_number_of_the_plugin
-Website = My very own website
+Description = Displays date/time and basic information about home conditions (temperature, humidity, etc.)
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors
