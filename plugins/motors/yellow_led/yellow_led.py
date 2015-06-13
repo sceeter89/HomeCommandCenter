@@ -1,14 +1,16 @@
+from yapsy.IPlugin import IPlugin
+from api.motor import Motor
 from helpers.diode import Diode
 
 LED_PIN = 14
 LOW_TEMPERATURE_WARNING = 15
 HIGH_TEMPERATURE_WARNING = 28
 
-class YellowLed(Diode):
-    counter = 0
-
+class YellowLed(Motor, IPlugin):
     def __init__(self):
-        super().__init__(LED_PIN)
+        super().__init__()
+        self._diode = Diode(LED_PIN)
+        self.counter = 0
 
     def on_trigger(self, current_state):
         if self.counter % 2 != 0:
@@ -19,13 +21,13 @@ class YellowLed(Diode):
             temperature = current_state['thermometer']['value']
 
             if temperature <= LOW_TEMPERATURE_WARNING or temperature >= HIGH_TEMPERATURE_WARNING:
-                self._toggle()
+                self._diode.toggle()
                 return
 
         if current_state['disabled_plugins']:
-            self._on()
+            self._diode.on()
         else:
-            self._off()
+            self._diode.off()
 
 
 

@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from datetime import datetime
 import logging
 import requests
+from yapsy.IPlugin import IPlugin
 
 from api.motor import Motor
 
@@ -10,7 +11,7 @@ ALARM_ON_ALERT_MESSAGE = "Command Center - Alarm is now on alert! Alert start ti
 ALARM_ON_ALERT_OFF_MESSAGE = "Command Center - Alarm alert is off. Stop time: %s"
 
 
-class SmsSender(Motor):
+class SmsSender(Motor, IPlugin):
     def __init__(self):
         super().__init__()
         config = ConfigParser()

@@ -1,8 +1,7 @@
 import abc
-from yapsy.IPlugin import IPlugin
 
 
-class Motor(IPlugin):
+class Motor:
     @abc.abstractmethod
     def on_trigger(self, current_state):
         """ This method will be called repeatedly, so corresponding motor's state can be updated properly.

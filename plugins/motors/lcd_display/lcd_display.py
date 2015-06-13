@@ -1,3 +1,4 @@
+from yapsy.IPlugin import IPlugin
 from api.motor import Motor
 from helpers.LcdDisplay import LcdDisplay as DisplayDevice
 
@@ -10,8 +11,9 @@ PIN_DB_7 = 22
 PIN_BACKLIGHT = 3
 
 
-class LcdDisplay(Motor):
+class LcdDisplay(Motor, IPlugin):
     def __init__(self):
+        super().__init__()
         self._device = DisplayDevice(PIN_E, PIN_RS, PIN_DB_4, PIN_DB_5, PIN_DB_6, PIN_DB_7, PIN_BACKLIGHT)
         self._device.clear()
         self._device.backlight_on()

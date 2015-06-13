@@ -1,12 +1,15 @@
 from configparser import ConfigParser
 from datetime import datetime, timedelta
+import logging
+from math import floor
+from yapsy.IPlugin import IPlugin
 from api.sensor import Sensor
 import requests
 
 UPDATE_INTERVAL = timedelta(minutes=30)
 
 
-class Thermometer(Sensor):
+class Thermometer(Sensor, IPlugin):
     def __init__(self):
         super().__init__()
         config = ConfigParser()
@@ -34,7 +37,7 @@ class Thermometer(Sensor):
         # Weather forecast contains 9 entries per day, 1st is cumulative, 2nd for 1:00, 3rd for 4:00 etc.. till 22:00
 
         forecast_entries = []
-        current_hour_index = datetime.now().hour / 3 + 1
+        current_hour_index = floor(datetime.now().hour / 3 + 1)
 
         if current_hour_index == 1:
             forecast_entries.extend(forecast[0]['hourly'][1:])

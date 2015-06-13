@@ -1,9 +1,9 @@
 import logging
-
+from yapsy.IPlugin import IPlugin
 from api.motor import Motor
 
 
-class ConsoleDebug(Motor):
+class ConsoleDebug(Motor, IPlugin):
     _counter = 0
     _modulo = 20
 

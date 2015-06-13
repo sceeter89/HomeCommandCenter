@@ -1,8 +1,7 @@
 import abc
-from yapsy.IPlugin import IPlugin
 
 
-class Sensor(IPlugin):
+class Sensor:
     @abc.abstractmethod
     def get_state(self):
         """

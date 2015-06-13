@@ -11,6 +11,7 @@ import smtplib
 import subprocess
 import time
 from api.motor import Motor
+from yapsy.IPlugin import IPlugin
 
 UNEXPECTED_TERMINATION_SUBJECT = "Command Center - Terminating"
 UNEXPECTED_TERMINATION_BODY = """Beware!
@@ -70,7 +71,7 @@ def _take_photo():
     return file_path
 
 
-class EmailSender(Motor):
+class EmailSender(Motor, IPlugin):
     def __init__(self):
         super().__init__()
         config = ConfigParser()

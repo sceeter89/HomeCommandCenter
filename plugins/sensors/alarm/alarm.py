@@ -1,11 +1,12 @@
 import RPi.GPIO as GPIO
+from yapsy.IPlugin import IPlugin
 from api.sensor import Sensor
 
 ALARM_ARMED_PIN = 10
 ALARM_ALERT_PIN = 9
 
 
-class Alarm(Sensor):
+class Alarm(Sensor, IPlugin):
     ITEMS_LIMIT = 8
     TRIGGER_THRESHOLD = 6
     DROP_THRESHOLD = 3
