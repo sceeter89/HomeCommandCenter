@@ -1,6 +1,5 @@
 from configparser import ConfigParser
 from datetime import datetime, timedelta
-import logging
 from math import floor
 from yapsy.IPlugin import IPlugin
 from api.sensor import Sensor
@@ -70,4 +69,5 @@ class Thermometer(Sensor, IPlugin):
             )
 
         self.cached_state = new_weather
+        self.last_update_time = datetime.now()
         return new_weather

@@ -2,19 +2,18 @@ from yapsy.IPlugin import IPlugin
 from api.motor import Motor
 from helpers.diode import Diode
 
-LED_PIN = 18
-
 
 class GreenLed(Motor, IPlugin):
     def __init__(self):
         super().__init__()
-        self._diode = Diode(LED_PIN)
+        self._diode = Diode(led_pin=18)
         self.counter = 0
+        self._diode.on()
 
     def on_trigger(self, current_state):
+        self.counter = (self.counter + 1) % 2
         if self.counter % 2 != 0:
             return
-        self.counter = (self.counter + 1) % 2
 
         if 'weather' not in current_state:
             self._diode.on()
