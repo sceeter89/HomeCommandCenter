@@ -7,12 +7,11 @@ class GreenLed(Motor, IPlugin):
     def __init__(self):
         super().__init__()
         self._diode = Diode(led_pin=18)
-        self.counter = 0
         self._diode.on()
 
     def on_trigger(self, current_state):
-        self.counter = (self.counter + 1) % 2
-        if self.counter % 2 != 0:
+        if current_state['termination']:
+            self._diode.off()
             return
 
         if 'weather' not in current_state:

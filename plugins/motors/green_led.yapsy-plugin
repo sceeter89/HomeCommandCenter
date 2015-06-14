@@ -2,6 +2,7 @@
 Name = Green LED
 Module = green_led/green_led
 Key = green-led
+Last chance = True
 
 [Documentation]
 Description = Indicates that system is running properly and blinks if weather forecast warns that it might rain

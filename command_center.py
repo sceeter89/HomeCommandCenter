@@ -117,6 +117,7 @@ class CoreApplication:
                 continue
 
             try:
+                logging.debug('Executing last chance motor: %s', plugin.key)
                 plugin.instance.on_trigger(terminal_state)
             except Exception as exception:
                 self._runtime_stats['errors'][plugin.key].append(exception)
@@ -133,7 +134,7 @@ def collect_all_plugins():
     for plugin in plugin_manager.getAllPlugins():
         name = plugin.name
         key = plugin.details.get('Core', 'key')
-        wants_last_chance = plugin.details.get('Core', 'last-chance', fallback='').lower() == "true"
+        wants_last_chance = plugin.details.get('Core', 'last chance', fallback='').lower() == "true"
         instance = plugin.plugin_object
         path = plugin.path
         yield PluginDetails(name, key, instance, wants_last_chance, path)
