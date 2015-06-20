@@ -2,6 +2,7 @@
 Name = LCD Display Plugin
 Module = lcd_display/lcd_display
 Key = lcd-display
+Last chance = True
 
 [Documentation]
 Description = Displays date/time and basic information about home conditions (temperature, humidity, etc.)

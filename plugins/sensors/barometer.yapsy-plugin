@@ -1,0 +1,10 @@
+[Core]
+Name = Barometer
+Module = barometer/barometer
+Key = barometer
+
+[Documentation]
+Description = Retrieves atmospheric pressure from BMP180 barometer
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-sensors
