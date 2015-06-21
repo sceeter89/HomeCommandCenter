@@ -130,11 +130,14 @@ class EmailSender(Motor, IPlugin):
             logging.exception('Unexpected error', exc_info=e)
 
     def _take_photo_and_send_mail(self, subject, body, holiday_mode):
-        photo1 = _take_photo()
-        time.sleep(0.5)
-        photo2 = _take_photo()
-
-        self._send_plain_text_mail(subject, body, holiday_mode, [photo1, photo2])
+        try:
+            photo1 = _take_photo()
+            time.sleep(0.5)
+            photo2 = _take_photo()
+            self._send_plain_text_mail(subject, body, holiday_mode, [photo1, photo2])
+        except Exception as e:
+            logging.debug('Failed to attach photos. Sending text-only email.', exc_info=e)
+            self._send_plain_text_mail(subject, body, holiday_mode)
 
     def on_trigger(self, current_state):
         holiday_mode = "user-settings" in current_state and current_state["user-settings"]["holiday-mode"]
