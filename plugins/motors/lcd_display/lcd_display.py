@@ -28,6 +28,15 @@ class LcdDisplay(Motor, IPlugin):
 
             return
 
+        if "alarm" in current_state:
+            if current_state['alarm']['armed']:
+                self._device.set_message("Alarm is armed")
+                self._device.backlight_off()
+                return
+            else:
+                self._device.backlight_on()
+
+
         if current_state['now'].minute != self._last_set_minute:
             formatted_time = current_state['now'].strftime("%d.%m.%Y %H:%M")
             self._device.set_first_line_messsage(formatted_time)
