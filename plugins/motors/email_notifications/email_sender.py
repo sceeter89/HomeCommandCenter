@@ -1,9 +1,11 @@
 from configparser import ConfigParser
+from datetime import datetime
 from email.header import Header
-from email.mime.application import MIMEApplication
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
+import json
 import logging
 import os
 from os.path import basename
@@ -65,7 +67,7 @@ def _take_photo():
     subprocess.call(['/usr/bin/fswebcam',
                      '--resolution', '1280x720',
                      '--jpeg', '95',
-                     '--title', '"Photography on alert"',
+                     '--title', '"Your Home"',
                      '--no-subtitle',
                      '--save', file_path])
     return file_path
@@ -101,6 +103,7 @@ class EmailSender(Motor, IPlugin):
         try:
             smtp = self._open_smtp_connection()
             remove_attachments = True
+
             for recipient in recipients:
                 try:
                     msg = MIMEMultipart('alternative')
@@ -112,10 +115,9 @@ class EmailSender(Motor, IPlugin):
 
                     for attachment in attachments:
                         with open(attachment, "rb") as f:
-                            msg.attach(MIMEApplication(
-                                f.read(),
-                                Content_Disposition='attachment; filename="%s"' % basename(attachment)
-                            ))
+                            att = MIMEImage(f.read())
+                            att.add_header('Content-Disposition', 'attachment', filename=basename(attachment))
+                            msg.attach(att)
 
                     smtp.sendmail(self.origin, recipient, msg.as_string())
                 except Exception as e:
@@ -141,8 +143,8 @@ class EmailSender(Motor, IPlugin):
 
     def on_trigger(self, current_state):
         holiday_mode = "user-settings" in current_state and current_state["user-settings"]["holiday-mode"]
-        alarm_alert = "alarm" in current_state and current_state["alarm"]["alert"]
-        alarm_armed = "alarm" in current_state and current_state["alarm"]["armed"]
+        alarm_alert = "alarm" in current_state and current_state["alarm"]["alert"] == 1
+        alarm_armed = "alarm" in current_state and current_state["alarm"]["armed"] == 1
 
         if "termination" in current_state and current_state["termination"]:
             term_info = current_state["termination"]
@@ -152,7 +154,7 @@ class EmailSender(Motor, IPlugin):
                 self._send_plain_text_mail(UNEXPECTED_TERMINATION_SUBJECT, body, holiday_mode)
 
         if not self.alarm_previous_alert and alarm_alert:
-            self._take_photo_and_send_mail(ALARM_ON_ALERT_SUBJECT, ALARM_ON_ALERT_BODY, holiday_mode)
+            self._take_photo_and_send_mail(ALARM_ON_ALERT_SUBJECT, ALARM_ON_ALERT_BODY.format(now=datetime.now(), state=json.dumps(current_state)), holiday_mode)
         elif self.alarm_previous_alert and not alarm_alert:
             self._send_plain_text_mail(ALARM_ON_ALERT_OFF_SUBJECT, ALARM_ON_ALERT_OFF_BODY, holiday_mode)
         self.alarm_previous_alert = alarm_alert
