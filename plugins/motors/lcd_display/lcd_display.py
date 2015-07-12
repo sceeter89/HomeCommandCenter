@@ -8,7 +8,7 @@ PIN_DB_4 = 18
 PIN_DB_5 = 17
 PIN_DB_6 = 27
 PIN_DB_7 = 22
-PIN_BACKLIGHT =14
+PIN_BACKLIGHT = 14
 
 
 class LcdDisplay(Motor, IPlugin):
@@ -36,7 +36,6 @@ class LcdDisplay(Motor, IPlugin):
             else:
                 self._device.backlight_on()
 
-
         if current_state['now'].minute != self._last_set_minute:
             formatted_time = current_state['now'].strftime("%d.%m.%Y %H:%M")
             self._device.set_first_line_messsage(formatted_time)
@@ -44,12 +43,15 @@ class LcdDisplay(Motor, IPlugin):
 
         second_line = ""
         if "thermometer" in current_state:
-            second_line = "%.1f %s" % (current_state['thermometer']['value'], current_state['thermometer']['unit_symbol'])
+            second_line = "%.1f %s" % (
+            current_state['thermometer']['value'], current_state['thermometer']['unit_symbol'])
 
         if "hygrometer" in current_state:
-            second_line += "  " + "%d%s" % (current_state['hygrometer']['value'], current_state['hygrometer']['unit_symbol'])
+            second_line += "  " + "%d%s" % (
+            current_state['hygrometer']['value'], current_state['hygrometer']['unit_symbol'])
 
         if "barometer" in current_state:
-            second_line += "  " + "%d%s" % (current_state['barometer']['value'], current_state['barometer']['unit_symbol'])
+            second_line += "  " + "%d%s" % (
+            current_state['barometer']['value'], current_state['barometer']['unit_symbol'])
 
         self._device.set_second_line_messsage(second_line)
