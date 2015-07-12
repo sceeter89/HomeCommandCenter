@@ -1,5 +1,4 @@
-
-#!/usr/bin/python
+# !/usr/bin/python
 # Copyright (c) 2014 Adafruit Industries
 # Author: Tony DiCola
 
@@ -20,15 +19,16 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from __future__ import print_function
 import sys
 
 import Adafruit_DHT
 
 
 # Parse command line parameters.
-sensor_args = { '11': Adafruit_DHT.DHT11,
-                                '22': Adafruit_DHT.DHT22,
-                                '2302': Adafruit_DHT.AM2302 }
+sensor_args = {'11': Adafruit_DHT.DHT11,
+               '22': Adafruit_DHT.DHT22,
+               '2302': Adafruit_DHT.AM2302}
 
 sensor = sensor_args[sys.argv[1]]
 pin = sys.argv[2]
@@ -42,6 +42,6 @@ humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 # guarantee the timing of calls to read the sensor).
 # If this happens try again!
 if humidity is not None and temperature is not None:
-        print int(humidity)
+    print(int(humidity))
 else:
-        print '0'
+    print('0')

@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 from datetime import datetime
 import logging
+
 import requests
 from yapsy.IPlugin import IPlugin
 

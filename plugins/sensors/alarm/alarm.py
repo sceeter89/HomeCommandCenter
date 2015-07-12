@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from yapsy.IPlugin import IPlugin
+
 from api.sensor import Sensor
 
 ALARM_ARMED_PIN = 10

@@ -1,4 +1,5 @@
 from yapsy.IPlugin import IPlugin
+
 from api.motor import Motor
 from helpers.LcdDisplay import LcdDisplay as DisplayDevice
 
@@ -44,14 +45,14 @@ class LcdDisplay(Motor, IPlugin):
         second_line = ""
         if "thermometer" in current_state:
             second_line = "%.1f %s" % (
-            current_state['thermometer']['value'], current_state['thermometer']['unit_symbol'])
+                current_state['thermometer']['value'], current_state['thermometer']['unit_symbol'])
 
         if "hygrometer" in current_state:
             second_line += "  " + "%d%s" % (
-            current_state['hygrometer']['value'], current_state['hygrometer']['unit_symbol'])
+                current_state['hygrometer']['value'], current_state['hygrometer']['unit_symbol'])
 
         if "barometer" in current_state:
             second_line += "  " + "%d%s" % (
-            current_state['barometer']['value'], current_state['barometer']['unit_symbol'])
+                current_state['barometer']['value'], current_state['barometer']['unit_symbol'])
 
         self._device.set_second_line_messsage(second_line)

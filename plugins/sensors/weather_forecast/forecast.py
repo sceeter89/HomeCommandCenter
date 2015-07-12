@@ -1,9 +1,11 @@
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 from math import floor
+
 from yapsy.IPlugin import IPlugin
-from api.sensor import Sensor
 import requests
+
+from api.sensor import Sensor
 
 UPDATE_INTERVAL = timedelta(minutes=30)
 

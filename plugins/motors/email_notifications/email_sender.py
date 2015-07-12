@@ -12,8 +12,10 @@ from os.path import basename
 import smtplib
 import subprocess
 import time
-from api.motor import Motor
+
 from yapsy.IPlugin import IPlugin
+
+from api.motor import Motor
 
 UNEXPECTED_TERMINATION_SUBJECT = "Command Center - Terminating"
 UNEXPECTED_TERMINATION_BODY = """Beware!
@@ -154,7 +156,10 @@ class EmailSender(Motor, IPlugin):
                 self._send_plain_text_mail(UNEXPECTED_TERMINATION_SUBJECT, body, holiday_mode)
 
         if not self.alarm_previous_alert and alarm_alert:
-            self._take_photo_and_send_mail(ALARM_ON_ALERT_SUBJECT, ALARM_ON_ALERT_BODY.format(now=datetime.now(), state=json.dumps(current_state)), holiday_mode)
+            self._take_photo_and_send_mail(ALARM_ON_ALERT_SUBJECT, ALARM_ON_ALERT_BODY.format(now=datetime.now(),
+                                                                                              state=json.dumps(
+                                                                                                  current_state)),
+                                           holiday_mode)
         elif self.alarm_previous_alert and not alarm_alert:
             self._send_plain_text_mail(ALARM_ON_ALERT_OFF_SUBJECT, ALARM_ON_ALERT_OFF_BODY, holiday_mode)
         self.alarm_previous_alert = alarm_alert

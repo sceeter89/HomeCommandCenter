@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+from __future__ import print_function
 from Adafruit_BMP085 import BMP085
 
 # ===========================================================================
@@ -26,4 +26,4 @@ pressure = bmp.readPressure()
 # enter 102350 since we include two decimal places in the integer value
 # altitude = bmp.readAltitude(102350)
 
-print "%.2f\t%d" % (temp, (pressure / 100.0))
+print("%.2f\t%d" % (temp, (pressure / 100.0)))

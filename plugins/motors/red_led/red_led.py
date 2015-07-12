@@ -1,4 +1,5 @@
 from yapsy.IPlugin import IPlugin
+
 from api.motor import Motor
 from helpers.diode import Diode
 

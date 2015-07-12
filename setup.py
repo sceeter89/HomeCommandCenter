@@ -13,5 +13,5 @@ setup(
     author='Adam',
     author_email='sceeter@wp.pl',
     description='',
-    requires=['bottle', 'yapsy']
+    requires=['bottle', 'yapsy', 'pyhamcrest']
 )

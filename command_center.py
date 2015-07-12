@@ -1,12 +1,13 @@
 from collections import namedtuple, defaultdict
-from api.exceptions import TerminateApplication
-from api.sensor import Sensor
-from api.motor import Motor
-
 import time
 import logging
 from datetime import datetime, timedelta
+
 from yapsy.PluginManager import PluginManager
+
+from api.exceptions import TerminateApplication
+from api.sensor import Sensor
+from api.motor import Motor
 
 PluginDetails = namedtuple('PluginInfo', ['name', 'key', 'instance', 'wants_last_chance', 'path'])
 ALLOWED_UNHANDLED_EXCEPTIONS_PER_PLUGIN = 10

@@ -1,7 +1,8 @@
 import os
-from bottle import run, abort, request, post, get, response
 from threading import Lock
 import json
+
+from bottle import run, abort, request, post, get, response
 
 global_lock = Lock()
 SETTINGS_PATH = "/etc/command_center/user-settings.json"

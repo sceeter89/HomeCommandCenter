@@ -1,5 +1,7 @@
-from hamcrest import assert_that, only_contains
 import unittest
+
+from hamcrest import assert_that, only_contains
+
 from api.motor import Motor
 from api.sensor import Sensor
 from command_center import PluginDetails, load_plugins

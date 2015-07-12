@@ -2,6 +2,7 @@ from datetime import timedelta, datetime
 import subprocess
 
 from yapsy.IPlugin import IPlugin
+
 from api.sensor import Sensor
 
 PRESSURE_READ_CMD = '/usr/src/Adafruit-Raspberry-Pi-Python-Code/Adafruit_BMP085/pressure_reader.py'
@@ -21,7 +22,8 @@ class Hygrometer(Sensor, IPlugin):
         readings = subprocess.check_output(PRESSURE_READ_CMD, shell=True).strip()
         temperature, pressure = readings.split()
 
-        value = {'value': int(pressure), 'unit': 'hectopascal', 'unit_symbol': 'hPa', 'internal_temperature': float(temperature)}
+        value = {'value': int(pressure), 'unit': 'hectopascal', 'unit_symbol': 'hPa',
+                 'internal_temperature': float(temperature)}
         self.cached_state = value
         self.last_update_time = datetime.now()
         return value

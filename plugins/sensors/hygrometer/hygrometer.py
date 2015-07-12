@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import subprocess
 
 from yapsy.IPlugin import IPlugin
+
 from api.sensor import Sensor
 
 SENSOR = 11  # Acceptable values: [11, 22, 2302]
