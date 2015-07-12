@@ -12,4 +12,4 @@ And motors:
 * Email / SMS notifier
 * Air conditioner remote control
 
-Please see [Wiki](https://github.com/sceeter89/command-center/wiki/Home%20Command%20Center) for further information.
+Please see [Wiki](https://github.com/sceeter89/command-center/wiki) for further information.
