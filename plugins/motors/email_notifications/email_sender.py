@@ -5,7 +5,6 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
-import json
 import logging
 import os
 from os.path import basename
@@ -191,5 +190,5 @@ class EmailSender(Motor, IPlugin):
         self.alarm_previous_armed = alarm_armed
 
         if holiday_mode and datetime.now() - self.last_holiday_status_sent > HOLIDAY_STATUS_INTERVAL:
-            self._take_photo_and_send_mail(HOLIDAY_STATUS_SUBJECT, format_body(HOLIDAY_STATUS_BODY), holiday_mode)
+            self._take_photo_and_send_mail(HOLIDAY_STATUS_SUBJECT, format_body(HOLIDAY_STATUS_BODY), False)
             self.last_holiday_status_sent = datetime.now()
