@@ -1,0 +1,10 @@
+[Core]
+Name = User Settings
+Module = user_settings/user_settings
+Key = user-settings
+
+[Documentation]
+Description = Provides information adjustable by user, to influence behavior of system.
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-sensors

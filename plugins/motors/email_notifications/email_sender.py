@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.header import Header
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
@@ -12,6 +12,7 @@ from os.path import basename
 import smtplib
 import subprocess
 import time
+import pprint
 
 from yapsy.IPlugin import IPlugin
 
@@ -63,6 +64,18 @@ Regards,
 Your Home
 """
 
+HOLIDAY_STATUS_SUBJECT = "Command Center - Holiday status"
+HOLIDAY_STATUS_BODY = """As you are not home at the moment I would like you to keep you up with what's happening in your home.
+Below you will find entire home status and photos attached. Information was gathered at: {now}.
+
+{state}
+
+Regards,
+Your Home
+"""
+
+HOLIDAY_STATUS_INTERVAL = timedelta(hours=6)
+
 
 def _take_photo():
     file_path = '/tmp/photo{0}.jpg'.format(time.time())
@@ -90,6 +103,8 @@ class EmailSender(Motor, IPlugin):
         self.holiday_recipients = config.get('email', 'holiday_recipients').split(';')
         self.alarm_previous_armed = False
         self.alarm_previous_alert = False
+
+        self.last_holiday_status_sent = datetime.min
 
     def _open_smtp_connection(self):
         smtp = smtplib.SMTP(self.host, self.port)
@@ -148,6 +163,10 @@ class EmailSender(Motor, IPlugin):
         alarm_alert = "alarm" in current_state and current_state["alarm"]["alert"] == 1
         alarm_armed = "alarm" in current_state and current_state["alarm"]["armed"] == 1
 
+        def format_body(body_text):
+            return body_text.format(state=pprint.pformat(current_state),
+                                    now=datetime.now())
+
         if "termination" in current_state and current_state["termination"]:
             term_info = current_state["termination"]
             if term_info[0]:
@@ -156,17 +175,21 @@ class EmailSender(Motor, IPlugin):
                 self._send_plain_text_mail(UNEXPECTED_TERMINATION_SUBJECT, body, holiday_mode)
 
         if not self.alarm_previous_alert and alarm_alert:
-            self._take_photo_and_send_mail(ALARM_ON_ALERT_SUBJECT, ALARM_ON_ALERT_BODY.format(now=datetime.now(),
-                                                                                              state=json.dumps(
-                                                                                                  current_state)),
+            self._take_photo_and_send_mail(ALARM_ON_ALERT_SUBJECT, format_body(ALARM_ON_ALERT_BODY),
                                            holiday_mode)
         elif self.alarm_previous_alert and not alarm_alert:
-            self._send_plain_text_mail(ALARM_ON_ALERT_OFF_SUBJECT, ALARM_ON_ALERT_OFF_BODY, holiday_mode)
+            self._send_plain_text_mail(ALARM_ON_ALERT_OFF_SUBJECT, format_body(ALARM_ON_ALERT_OFF_BODY), holiday_mode)
         self.alarm_previous_alert = alarm_alert
 
         if holiday_mode and self.alarm_previous_armed and not alarm_armed:
-            self._take_photo_and_send_mail(ALARM_ON_HOLIDAY_DISARMED_SUBJECT, ALARM_ON_HOLIDAY_DISARMED_BODY,
+            self._take_photo_and_send_mail(ALARM_ON_HOLIDAY_DISARMED_SUBJECT,
+                                           format_body(ALARM_ON_HOLIDAY_DISARMED_BODY),
                                            holiday_mode)
         elif holiday_mode and not self.alarm_previous_armed and alarm_armed:
-            self._send_plain_text_mail(ALARM_ON_HOLIDAY_ARMED_SUBJECT, ALARM_ON_HOLIDAY_ARMED_BODY, holiday_mode)
+            self._send_plain_text_mail(ALARM_ON_HOLIDAY_ARMED_SUBJECT, format_body(ALARM_ON_HOLIDAY_ARMED_BODY),
+                                       holiday_mode)
         self.alarm_previous_armed = alarm_armed
+
+        if holiday_mode and datetime.now() - self.last_holiday_status_sent > HOLIDAY_STATUS_INTERVAL:
+            self._take_photo_and_send_mail(HOLIDAY_STATUS_SUBJECT, format_body(HOLIDAY_STATUS_BODY), holiday_mode)
+            self.last_holiday_status_sent = datetime.now()

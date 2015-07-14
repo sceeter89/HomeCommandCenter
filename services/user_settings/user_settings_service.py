@@ -6,6 +6,8 @@ from bottle import run, abort, request, post, get, response
 
 global_lock = Lock()
 SETTINGS_PATH = "/etc/command_center/user-settings.json"
+LISTEN_PORT = 8085
+LISTEN_ADDRESS = "localhost"
 
 urls = (
     '/', 'All'
@@ -50,7 +52,7 @@ def update_setting(name):
             with open(SETTINGS_PATH, 'r') as f:
                 settings = json.load(f)
         try:
-            body = json.load(request.body)
+            body = json.loads(request.body.read().decode('utf-8'))
         except ValueError:
             abort(400, 'Content is not valid JSON object')
             return
@@ -61,4 +63,4 @@ def update_setting(name):
 
 
 if __name__ == "__main__":
-    run(host='0.0.0.0', port=8085)
+    run(host=LISTEN_ADDRESS, port=LISTEN_PORT)
