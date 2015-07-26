@@ -183,7 +183,7 @@ class EmailSender(Motor, IPlugin):
         if holiday_mode and self.alarm_previous_armed and not alarm_armed:
             self._take_photo_and_send_mail(ALARM_ON_HOLIDAY_DISARMED_SUBJECT,
                                            format_body(ALARM_ON_HOLIDAY_DISARMED_BODY),
-                                           holiday_mode)
+                                           False)
         elif holiday_mode and not self.alarm_previous_armed and alarm_armed:
             self._send_plain_text_mail(ALARM_ON_HOLIDAY_ARMED_SUBJECT, format_body(ALARM_ON_HOLIDAY_ARMED_BODY),
                                        holiday_mode)
