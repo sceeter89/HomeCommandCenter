@@ -11,6 +11,7 @@ from api.motor import Motor
 
 PluginDetails = namedtuple('PluginInfo', ['name', 'key', 'instance', 'wants_last_chance', 'path'])
 ALLOWED_UNHANDLED_EXCEPTIONS_PER_PLUGIN = 10
+MINIMAL_LOOP_DURATION = timedelta(seconds=0.2)
 
 
 class CoreApplication:
@@ -94,11 +95,6 @@ class CoreApplication:
 
                 self._disable_failing_plugins()
 
-                loop_stop = datetime.now()
-
-                loop_duration = loop_stop - loop_start
-                self._update_runtime_statistics(loop_duration)
-
                 if len(self._disabled_plugins) == len(self._sensors) + len(self._motors):
                     logging.warning('All plugins have been disabled. Terminating application..')
                     break
@@ -106,7 +102,13 @@ class CoreApplication:
                 if state['errors']:
                     logging.warning('Current loop was interrupted by following exceptions: %s', repr(state['errors']))
 
-                time.sleep(0.2)
+                loop_stop = datetime.now()
+
+                loop_duration = loop_stop - loop_start
+                self._update_runtime_statistics(loop_duration)
+
+                if loop_duration < MINIMAL_LOOP_DURATION:
+                    time.sleep((MINIMAL_LOOP_DURATION - loop_duration).total_seconds())
 
             except KeyboardInterrupt:
                 self._termination = (None, None, "User interruption")

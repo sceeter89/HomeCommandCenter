@@ -8,9 +8,9 @@ ALARM_ALERT_PIN = 9
 
 
 class Alarm(Sensor, IPlugin):
-    ITEMS_LIMIT = 3
-    TRIGGER_THRESHOLD = 3
-    DROP_THRESHOLD = 1
+    ITEMS_LIMIT = 20
+    TRIGGER_THRESHOLD = 15
+    DROP_THRESHOLD = 5
 
     def __init__(self):
         super().__init__()

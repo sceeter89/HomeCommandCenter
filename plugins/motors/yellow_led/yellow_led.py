@@ -15,8 +15,8 @@ class YellowLed(Motor, IPlugin):
         self._diode = Diode(led_pin=7)
 
     def on_trigger(self, current_state):
-        if 'thermometer' in current_state:
-            temperature = current_state['thermometer']['value']
+        if 'dht' in current_state:
+            temperature = current_state['dht']['temperature']['value']
 
             if temperature <= LOW_TEMPERATURE_WARNING or temperature >= HIGH_TEMPERATURE_WARNING:
                 self._diode.toggle()

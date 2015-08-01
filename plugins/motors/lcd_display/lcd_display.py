@@ -43,13 +43,11 @@ class LcdDisplay(Motor, IPlugin):
             self._last_set_minute = current_state['now'].minute
 
         second_line = ""
-        if "thermometer" in current_state:
+        if "dht" in current_state:
             second_line = "%.1f %s" % (
-                current_state['thermometer']['value'], current_state['thermometer']['unit_symbol'])
-
-        if "hygrometer" in current_state:
+                current_state['dht']['temperature']['value'], current_state['dht']['temperature']['unit_symbol'])
             second_line += "  " + "%d%s" % (
-                current_state['hygrometer']['value'], current_state['hygrometer']['unit_symbol'])
+                current_state['dht']['humidity']['value'], current_state['dht']['humidity']['unit_symbol'])
 
         if "barometer" in current_state:
             second_line += "  " + "%d%s" % (

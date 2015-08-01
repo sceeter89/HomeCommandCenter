@@ -1,10 +1,10 @@
 [Core]
-Name = Hygrometer
-Module = hygrometer/hygrometer
-Key = hygrometer
+Name = DHT-11 Sensor
+Module = dht/dht
+Key = dht
 
 [Documentation]
-Description = Retrieves humidity from DHT-11 hygrometer
+Description = Retrieves humidity and temperature from DHT-11 sensor
 Author = Yakuza
 Version = 1.0
 Website = https://github.com/sceeter89/command-center/wiki/Sample-sensors

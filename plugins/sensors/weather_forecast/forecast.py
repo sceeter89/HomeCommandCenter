@@ -10,7 +10,7 @@ from api.sensor import Sensor
 UPDATE_INTERVAL = timedelta(minutes=30)
 
 
-class Thermometer(Sensor, IPlugin):
+class WeatherForecast(Sensor, IPlugin):
     def __init__(self):
         super().__init__()
         config = ConfigParser()

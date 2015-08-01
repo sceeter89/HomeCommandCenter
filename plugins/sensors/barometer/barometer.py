@@ -9,7 +9,7 @@ PRESSURE_READ_CMD = '/usr/src/Adafruit-Raspberry-Pi-Python-Code/Adafruit_BMP085/
 UPDATE_INTERVAL = timedelta(minutes=5)
 
 
-class Hygrometer(Sensor, IPlugin):
+class Barometer(Sensor, IPlugin):
     def __init__(self):
         super().__init__()
 
