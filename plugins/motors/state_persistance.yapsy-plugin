@@ -1,0 +1,11 @@
+[Core]
+Name = State persistance
+Module = state_persistance/state_persistance
+Key = state-persistance
+Last chance = True
+
+[Documentation]
+Description = Stores current system state in configured redis server with prefix system-state:*
+Author = Yakuza
+Version = 1.0
+Website = https://github.com/sceeter89/command-center/wiki/Sample-motors
