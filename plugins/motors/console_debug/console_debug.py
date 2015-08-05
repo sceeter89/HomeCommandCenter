@@ -1,4 +1,5 @@
 import logging
+import pprint
 
 from yapsy.IPlugin import IPlugin
 
@@ -10,4 +11,4 @@ class ConsoleDebug(Motor, IPlugin):
 
     def on_trigger(self, current_state):
         if current_state['runtime']['loop_counter'] % self._modulo == 0:
-            logging.debug(repr(current_state))
+            logging.debug(pprint.pformat(current_state))
